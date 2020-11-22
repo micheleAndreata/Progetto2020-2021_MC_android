@@ -1,6 +1,6 @@
 package com.example.accordo;
 
-public interface NetworkResponseListener<T> {
+public interface ResponseListener<T> {
 
     void getResult(T result);
 }

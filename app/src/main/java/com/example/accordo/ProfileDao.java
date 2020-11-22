@@ -25,6 +25,6 @@ public interface ProfileDao {
     @Query("UPDATE profile_table SET picture = :newPicture, pversion = :newPVersion WHERE sid =  :sid")
     void updatePicture(String sid, String newPicture, String newPVersion);
 
-    @Query("SELECT * FROM profile_table WHERE sid = :sid")
-    Profile getProfile(String sid);
+    @Query("SELECT * FROM profile_table")
+    Profile getProfile();
 }
