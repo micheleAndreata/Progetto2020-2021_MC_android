@@ -1,5 +1,6 @@
 package com.example.accordo;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -25,5 +26,5 @@ public interface PostImageDao {
     PostImage getPostImage(String pid);
 
     @Query("SELECT * FROM postImage_table")
-    List<PostImage> getPostImages();
+    LiveData<List<PostImage>> getPostImages();
 }

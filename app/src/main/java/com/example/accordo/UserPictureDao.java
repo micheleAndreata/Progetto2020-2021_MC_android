@@ -1,5 +1,6 @@
 package com.example.accordo;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -25,5 +26,5 @@ public interface UserPictureDao {
     UserPicture getUserPicture(String uid);
 
     @Query("SELECT * FROM userPicture_table")
-    List<UserPicture> getUserPictures();
+    LiveData<List<UserPicture>> getUserPictures();
 }

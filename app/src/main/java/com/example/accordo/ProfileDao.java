@@ -1,5 +1,6 @@
 package com.example.accordo;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -26,5 +27,5 @@ public interface ProfileDao {
     void updatePicture(String sid, String newPicture, String newPVersion);
 
     @Query("SELECT * FROM profile_table")
-    Profile getProfile();
+    LiveData<Profile> getProfile();
 }
