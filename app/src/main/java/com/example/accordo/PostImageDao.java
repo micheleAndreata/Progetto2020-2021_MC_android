@@ -26,5 +26,8 @@ public interface PostImageDao {
     PostImage getPostImage(String pid);
 
     @Query("SELECT * FROM postImage_table")
-    LiveData<List<PostImage>> getPostImages();
+    List<PostImage> getPostImages();
+
+    @Query("SELECT * FROM postImage_table")
+    LiveData<List<PostImage>> getLivePostImages();
 }

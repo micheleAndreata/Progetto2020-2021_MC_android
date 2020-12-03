@@ -26,5 +26,8 @@ public interface UserPictureDao {
     UserPicture getUserPicture(String uid);
 
     @Query("SELECT * FROM userPicture_table")
-    LiveData<List<UserPicture>> getUserPictures();
+    List<UserPicture> getUserPictures();
+
+    @Query("SELECT * FROM userPicture_table")
+    LiveData<List<UserPicture>> getLiveUserPictures();
 }
