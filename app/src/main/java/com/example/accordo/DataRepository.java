@@ -165,11 +165,22 @@ public class DataRepository {
         NetworkManager.getInstance(ctx).getChannel(jsonGetChannel, listener);
     }
 
-    void getWall(Context context, final ResponseListener<JSONObject> listener){
+    void getWall(Context context, final ResponseListener<List<String>> listener){
         JSONObject jsonContent = new JSONObject();
         try {jsonContent.put("sid", profile.getString("sid", null));}
         catch (JSONException e) {e.printStackTrace();}
-        NetworkManager.getInstance(context).getWall(jsonContent, listener);
+        NetworkManager.getInstance(context).getWall(jsonContent, result -> {
+            if (result != null){
+                try {
+                    JSONArray jsonWall = result.getJSONArray("channels");
+                    List<String> wall = new ArrayList<>();
+                    for (int i=0; i < jsonWall.length(); i++){
+                        wall.add(jsonWall.getString(i));
+                    }
+                    listener.getResult(wall);
+                } catch (JSONException e) { e.printStackTrace(); }
+            }
+        });
     }
 
     /*
