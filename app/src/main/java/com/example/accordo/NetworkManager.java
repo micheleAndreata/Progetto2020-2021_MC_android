@@ -13,8 +13,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
 public class NetworkManager {
 
     private static final String LOG_TAG = "NetworkManager";
@@ -34,7 +32,7 @@ public class NetworkManager {
         return instance;
     }
 
-    public void register(final NetworkResponseListener<String> listener){
+    public void register(final ResponseListener<String> listener){
         String registerURL = baseURL + "register.php";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -65,7 +63,7 @@ public class NetworkManager {
         queue.add(request);
     }
 
-    public void getProfile(String sid, final NetworkResponseListener<JSONObject> listener){
+    public void getProfile(String sid, final ResponseListener<JSONObject> listener){
         String getProfileURL = baseURL + "getProfile.php";
 
         JSONObject jsonContent = new JSONObject();
@@ -97,7 +95,7 @@ public class NetworkManager {
         queue.add(request);
     }
 
-    public void setProfile(JSONObject jsonContent, final NetworkResponseListener<Boolean> listener){
+    public void setProfile(JSONObject jsonContent, final ResponseListener<Boolean> listener){
         String setProfileURL = baseURL + "setProfile.php";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
@@ -121,7 +119,7 @@ public class NetworkManager {
         queue.add(request);
     }
 
-    public void addChannel(JSONObject jsonContent, final NetworkResponseListener<Boolean> listener){
+    public void addChannel(JSONObject jsonContent, final ResponseListener<Boolean> listener){
         String addChannelURL = baseURL + "addChannel.php";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
@@ -145,7 +143,7 @@ public class NetworkManager {
         queue.add(request);
     }
 
-    public void getWall(JSONObject jsonContent, final NetworkResponseListener<JSONObject> listener){
+    public void getWall(JSONObject jsonContent, final ResponseListener<JSONObject> listener){
         String getWallURL = baseURL + "getWall.php";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
@@ -169,7 +167,7 @@ public class NetworkManager {
         queue.add(request);
     }
 
-    public void addPost(JSONObject jsonContent, final NetworkResponseListener<Boolean> listener){
+    public void addPost(JSONObject jsonContent, final ResponseListener<Boolean> listener){
         String addPostURL = baseURL + "addPost.php";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
@@ -193,7 +191,7 @@ public class NetworkManager {
         queue.add(request);
     }
 
-    public void getChannel(JSONObject jsonContent, final NetworkResponseListener<JSONObject> listener){
+    public void getChannel(JSONObject jsonContent, final ResponseListener<JSONObject> listener){
         String getChannelURL = baseURL + "getChannel.php";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
@@ -217,7 +215,7 @@ public class NetworkManager {
         queue.add(request);
     }
 
-    public void getPostImage(JSONObject jsonContent, final NetworkResponseListener<JSONObject> listener){
+    public void getPostImage(JSONObject jsonContent, final ResponseListener<JSONObject> listener){
         String getPostImageURL = baseURL + "getPostImage.php";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
@@ -241,7 +239,7 @@ public class NetworkManager {
         queue.add(request);
     }
 
-    public void getUserPicture(JSONObject jsonContent, final NetworkResponseListener<JSONObject> listener){
+    public void getUserPicture(JSONObject jsonContent, final ResponseListener<JSONObject> listener){
         String getUserPictureURL = baseURL + "getUserPicture.php";
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
