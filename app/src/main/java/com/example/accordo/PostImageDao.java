@@ -8,7 +8,9 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Dao
 public interface PostImageDao {

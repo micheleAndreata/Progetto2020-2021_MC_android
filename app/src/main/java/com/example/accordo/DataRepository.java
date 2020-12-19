@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class DataRepository {
@@ -37,8 +35,15 @@ public class DataRepository {
         this.dbPostImages = postImageDao.getLivePostImages();
         this.dbUserPictures = userPictureDao.getLiveUserPictures();
 
-        //TODO che succede se ho più istanze diverse di DataRepository?
         profile = application.getSharedPreferences("profile_data", Context.MODE_PRIVATE);
+    }
+
+    public PostImageDao getPostImageDao() {
+        return postImageDao;
+    }
+
+    public UserPictureDao getUserPictureDao() {
+        return userPictureDao;
     }
 
     public LiveData<List<PostImage>> getLiveDbPostImages() {
@@ -139,21 +144,6 @@ public class DataRepository {
         });
     }
 
-    void register(Context ctx){
-        if (profile.getString("sid", null) == null) {
-            NetworkManager.getInstance(ctx).register(result -> {
-                SharedPreferences.Editor editor = profile.edit();
-                editor.putString("sid", result);
-                editor.apply();
-                //TODO nuova registrazione
-                Log.d("DataRepository", "nuova registrazione completata");
-            });
-        }
-        else {
-            Log.d("DataRepository", "utente gia registrato");
-        }
-    }
-
     void getChannel(Context ctx, String ctitle, final ResponseListener<JSONObject> listener){
         JSONObject jsonGetChannel = new JSONObject();
         try {
@@ -165,7 +155,7 @@ public class DataRepository {
         NetworkManager.getInstance(ctx).getChannel(jsonGetChannel, listener);
     }
 
-    void getWall(Context context, final ResponseListener<List<String>> listener){
+    void getWall(Context context, final ResponseListener<List<JSONObject>> listener){
         JSONObject jsonContent = new JSONObject();
         try {jsonContent.put("sid", profile.getString("sid", null));}
         catch (JSONException e) {e.printStackTrace();}
@@ -173,26 +163,13 @@ public class DataRepository {
             if (result != null){
                 try {
                     JSONArray jsonWall = result.getJSONArray("channels");
-                    List<String> wall = new ArrayList<>();
+                    List<JSONObject> wall = new ArrayList<>();
                     for (int i=0; i < jsonWall.length(); i++){
-                        wall.add(jsonWall.getString(i));
+                        wall.add(jsonWall.getJSONObject(i));
                     }
                     listener.getResult(wall);
                 } catch (JSONException e) { e.printStackTrace(); }
             }
         });
     }
-
-    /*
-    void setProfile(String sid, String uid, String name, String picture, String pversion){
-        SharedPreferences.Editor editor = profile.edit();
-        editor.putString("sid", sid);
-        editor.putString("uid", uid);
-        editor.putString("name", name);
-        editor.putString("picture", picture);
-        editor.putString("pversion", pversion);
-        editor.apply();
-    }
-     */
-
 }
