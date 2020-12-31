@@ -1,49 +1,38 @@
 package com.example.accordo;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import androidx.annotation.NonNull;
 
-public class Post {
+import java.util.Objects;
+
+public abstract class Post {
 
     private String pid;
-    private String type;
-    private String content;
-    private Double lat;
-    private Double lon;
     private String uid;
     private String name;
+    private int pVersion;
+    private String userPicture = null;
 
-    public Post(JSONObject jsonPost) throws JSONException {
-        this.type = jsonPost.getString("type");
-        this.pid = jsonPost.getString("pid");
-        this.uid = jsonPost.getString("uid");
-        this.name = jsonPost.getString("name");
-        if (this.type.equals("l")){
-            this.lat = jsonPost.getDouble("lat");
-            this.lon = jsonPost.getDouble("lon");
-        }
-        else if (this.type.equals("t")){
-            this.content = jsonPost.getString("content");
-        }
-        else {
-            this.content = null;
-        }
+    Post(@NonNull String pid, String uid, String name, int pVersion){
+        this.pid = pid;
+        this.uid = uid;
+        this.name = name;
+        this.pVersion = pVersion;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setUserPicture(String userPicture) {
+        this.userPicture = userPicture;
     }
 
-    public String getContent() {
-        return content;
+    public String getUserPicture() {
+        return userPicture;
     }
 
-    public Double getLat() {
-        return lat;
+    public int getPVersion() {
+        return pVersion;
     }
 
-    public Double getLon() {
-        return lon;
+    public String getUid() {
+        return uid;
     }
 
     public String getName() {
@@ -54,11 +43,32 @@ public class Post {
         return pid;
     }
 
-    public String getType() {
-        return type;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUid() {
-        return uid;
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public void setPVersion(int pVersion) {
+        this.pVersion = pVersion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return pid.equals(post.pid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pid);
     }
 }

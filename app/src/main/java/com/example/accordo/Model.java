@@ -2,76 +2,103 @@ package com.example.accordo;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class Model extends AndroidViewModel {
+public class Model {
 
-    private DataRepository repo;
-    private MutableLiveData<List<String>> myChannels = new MutableLiveData<>();
-    private MutableLiveData<List<String>> otherChannels = new MutableLiveData<>();
-    private MutableLiveData<List<Post>> channel = new MutableLiveData<>();
+    private static Model instance;
 
-    public Model(@NonNull Application application) {
-        super(application);
-        repo = new DataRepository(application);
+    private NetworkManager networkManager;
+
+    private SharedPreferences profile;
+
+    private List<Post> channel = new ArrayList<>();
+    private List<String> myWall = new ArrayList<>();
+    private List<String> notMyWall = new ArrayList<>();
+
+    private UserPictureDao userPictureDao;
+    private PostImageDao postImageDao;
+
+    private Model(@NonNull Application application) {
+        this.networkManager = NetworkManager.getInstance(application);
+
+        AppDatabase db = AppDatabase.getDatabase(application);
+        this.userPictureDao = db.userPictureDao();
+        this.postImageDao = db.postImageDao();
+
+        profile = application.getSharedPreferences("profile_data", Context.MODE_PRIVATE);
     }
 
-    public MutableLiveData<List<String>> getMyChannels() {
-        return myChannels;
+    public static Model getInstance(Application application){
+        if (instance == null){
+            instance = new Model(application);
+        }
+        return instance;
     }
 
-    public MutableLiveData<List<String>> getOtherChannels() {
-        return otherChannels;
+    public PostImageDao getPostImageDao() {
+        return postImageDao;
     }
 
-    public void updateWall(Context ctx){
-        repo.getWall(ctx, wall -> {
-            List<String> mine = new ArrayList<>();
-            List<String> notMine = new ArrayList<>();
-            try {
-                for (JSONObject channel : wall){
-                    if (channel.getString("mine").equals("t")){
-                        mine.add(channel.getString("ctitle"));
-                    }
-                    else{
-                        notMine.add(channel.getString("ctitle"));
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+    public UserPictureDao getUserPictureDao() {
+        return userPictureDao;
+    }
+
+    public List<String> getMyWall() {
+        return myWall;
+    }
+
+    public List<String> getNotMyWall() {
+        return notMyWall;
+    }
+
+    public void setMyWall(List<String> myWall) {
+        this.myWall = myWall;
+    }
+
+    public void setNotMyWall(List<String> notMyWall) {
+        this.notMyWall = notMyWall;
+    }
+
+    public synchronized int getChannelSize(){
+        return channel.size();
+    }
+
+    public synchronized Post getPost(int index) {
+        return channel.get(index);
+    }
+
+    public synchronized void setChannel(List<Post> channel) {
+        this.channel = channel;
+    }
+
+    public synchronized void setPost(int index, Post post){
+        channel.set(index, post);
+    }
+
+    public synchronized void insertUserPicture(String uid, int pVersion, String picture) {
+        for (int i=0; i < channel.size(); i++){
+            Post post = channel.get(i);
+            if (post.getUid().equals(uid)){
+                post.setUserPicture(picture);
+                post.setPVersion(pVersion);
+                channel.set(i, post);
             }
-            myChannels.setValue(mine);
-            otherChannels.setValue(notMine);
-        });
+        }
     }
 
-    public void getChannel(Context ctx, String ctitle){
-        List<Post> channel = new ArrayList<>();
-        repo.getChannel(ctx, ctitle, jsonObjectChannel -> {
-            try {
-                JSONArray jsonArrayChannel = jsonObjectChannel.getJSONArray("posts");
-                for (int i=0; i < jsonArrayChannel.length(); i++){
-                    JSONObject p = jsonArrayChannel.getJSONObject(i);
-                    channel.add(new Post(p));
-                }
-                this.channel.setValue(channel);
-                repo.updateDbPostImages(ctx, jsonObjectChannel);
-                repo.updateDbUserPictures(ctx, jsonObjectChannel);
+    public synchronized void insertPostImage(PostImage postImage){
+        for (int i=0; i < channel.size(); i++){
+            Post post = channel.get(i);
+            if (post.getPid().equals(postImage.getPid())){
+                ((PostTypeImage) post).setImage(postImage.getImage());
+                channel.set(i, post);
             }
-            catch (JSONException e) {e.printStackTrace();}
-        });
+        }
     }
 }

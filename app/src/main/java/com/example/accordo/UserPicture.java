@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity(tableName = "userPicture_table")
 public class UserPicture {
 
@@ -15,13 +17,12 @@ public class UserPicture {
 
     @NonNull
     @ColumnInfo(name = "pversion")
-    private String pversion;
+    private Integer pversion;
 
-    @NonNull
     @ColumnInfo(name = "picture")
     private String picture;
 
-    public UserPicture(@NonNull String uid, @NonNull String pversion, @NonNull String picture){
+    public UserPicture(@NonNull String uid, @NonNull Integer pversion, String picture){
         this.uid = uid;
         this.pversion = pversion;
         this.picture = picture;
@@ -33,12 +34,24 @@ public class UserPicture {
     }
 
     @NonNull
-    public String getPversion() {
+    public Integer getPversion() {
         return pversion;
     }
 
-    @NonNull
     public String getPicture() {
         return picture;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserPicture that = (UserPicture) o;
+        return uid.equals(that.uid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid);
     }
 }

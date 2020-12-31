@@ -1,28 +1,29 @@
 package com.example.accordo;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+public class WallViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-class WallViewHolder extends RecyclerView.ViewHolder {
-    private final TextView itemView;
+    private TextView cTitleView;
+    private OnRecyclerViewClickListener onRecyclerViewClickListener;
 
-    private WallViewHolder(View itemView) {
+    public WallViewHolder(@NonNull View itemView, OnRecyclerViewClickListener onRecyclerViewClickListener) {
         super(itemView);
-        this.itemView = itemView.findViewById(R.id.textView);
+        itemView.setOnClickListener(this);
+        this.onRecyclerViewClickListener = onRecyclerViewClickListener;
+        cTitleView = itemView.findViewById(R.id.cTitle);
     }
 
-    public void bind(String channelName) {
-        itemView.setText(channelName);
+    public void bind(String cTitle){
+        cTitleView.setText(cTitle);
     }
 
-    static WallViewHolder create(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_wall, parent, false);
-        return new WallViewHolder(view);
+    @Override
+    public void onClick(View view) {
+        onRecyclerViewClickListener.onRecyclerViewClick(view, getAdapterPosition());
     }
 }
