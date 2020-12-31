@@ -9,8 +9,8 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {UserPicture.class, PostImage.class}, version = 2, exportSchema = false)
-public abstract class AppDatabase  extends RoomDatabase {
+@Database(entities = {UserPicture.class, PostImage.class}, version = 1, exportSchema = false)
+public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UserPictureDao userPictureDao();
     public abstract PostImageDao postImageDao();
@@ -25,7 +25,6 @@ public abstract class AppDatabase  extends RoomDatabase {
                 if (INSTANCE == null)
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "app_database")
-                            .fallbackToDestructiveMigration() //TODO capire se tenere o no
                             .build();
             }
         }

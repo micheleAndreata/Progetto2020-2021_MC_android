@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity(tableName = "postImage_table")
 public class PostImage {
 
@@ -14,21 +16,39 @@ public class PostImage {
     private String pid;
 
     @NonNull
-    @ColumnInfo(name = "picture")
-    private String picture;
+    @ColumnInfo(name = "image")
+    private String image;
 
-    public PostImage(@NonNull String pid, @NonNull String picture){
+    public PostImage(@NonNull String pid, @NonNull String image){
         this.pid = pid;
-        this.picture = picture;
+        this.image = image;
     }
 
     @NonNull
-    public String getPicture() {
-        return picture;
+    public String getImage() {
+        return image;
     }
 
     @NonNull
     public String getPid() {
         return pid;
+    }
+
+    public void setImage(@NonNull String image){
+        this.image = image;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PostImage postImage = (PostImage) o;
+        return pid.equals(postImage.pid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pid);
     }
 }
