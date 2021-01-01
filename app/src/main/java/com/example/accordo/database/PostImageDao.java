@@ -1,4 +1,4 @@
-package com.example.accordo;
+package com.example.accordo.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

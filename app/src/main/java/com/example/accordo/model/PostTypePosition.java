@@ -1,4 +1,4 @@
-package com.example.accordo;
+package com.example.accordo.model;
 
 import androidx.annotation.NonNull;
 
@@ -10,7 +10,7 @@ public class PostTypePosition extends Post {
     private double lon;
 
 
-    PostTypePosition(@NonNull String pid, String uid, String name, int pVersion, double lat, double lon) {
+    public PostTypePosition(@NonNull String pid, String uid, String name, int pVersion, double lat, double lon) {
         super(pid, uid, name, pVersion);
         this.lat = lat;
         this.lon = lon;

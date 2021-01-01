@@ -1,4 +1,4 @@
-package com.example.accordo;
+package com.example.accordo.model;
 
 import androidx.annotation.NonNull;
 
@@ -12,7 +12,7 @@ public abstract class Post {
     private int pVersion;
     private String userPicture = null;
 
-    Post(@NonNull String pid, String uid, String name, int pVersion){
+    public Post(@NonNull String pid, String uid, String name, int pVersion){
         this.pid = pid;
         this.uid = uid;
         this.name = name;

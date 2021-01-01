@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.accordo.model.Model;
+import com.example.accordo.model.Post;
+
 public class ChannelAdapter extends RecyclerView.Adapter<ChannelViewHolder> {
 
     private LayoutInflater mInflater;

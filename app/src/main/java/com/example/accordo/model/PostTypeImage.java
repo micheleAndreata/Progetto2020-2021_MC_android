@@ -1,4 +1,4 @@
-package com.example.accordo;
+package com.example.accordo.model;
 
 import androidx.annotation.NonNull;
 
@@ -6,7 +6,7 @@ public class PostTypeImage extends Post {
 
     private String image;
 
-    PostTypeImage(@NonNull String pid, String uid, String name, int pVersion, String image) {
+    public PostTypeImage(@NonNull String pid, String uid, String name, int pVersion, String image) {
         super(pid, uid, name, pVersion);
         this.image = image;
     }

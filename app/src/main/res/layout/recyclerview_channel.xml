@@ -20,7 +20,7 @@
             tools:srcCompat="@android:drawable/ic_menu_report_image" />
 
         <TextView
-            android:id="@+id/username"
+            android:id="@+id/usernameView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -30,7 +30,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="content"

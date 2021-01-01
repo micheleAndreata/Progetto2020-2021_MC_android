@@ -9,6 +9,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.accordo.database.PostImage;
+import com.example.accordo.database.UserPicture;
+import com.example.accordo.model.Post;
+import com.example.accordo.model.PostTypeImage;
+import com.example.accordo.model.PostTypePosition;
+import com.example.accordo.model.PostTypeText;
 
 import org.json.JSONArray;
 import org.json.JSONException;

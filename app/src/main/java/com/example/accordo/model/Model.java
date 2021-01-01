@@ -1,10 +1,16 @@
-package com.example.accordo;
+package com.example.accordo.model;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+
+import com.example.accordo.NetworkManager;
+import com.example.accordo.database.AppDatabase;
+import com.example.accordo.database.PostImage;
+import com.example.accordo.database.PostImageDao;
+import com.example.accordo.database.UserPictureDao;
 
 import java.util.ArrayList;
 import java.util.List;
