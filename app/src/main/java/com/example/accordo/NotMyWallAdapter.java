@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.accordo.model.Model;
+
 public class NotMyWallAdapter extends RecyclerView.Adapter<WallViewHolder> {
 
     private LayoutInflater mInflater;

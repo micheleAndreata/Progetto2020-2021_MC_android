@@ -1,4 +1,4 @@
-package com.example.accordo;
+package com.example.accordo.model;
 
 import androidx.annotation.NonNull;
 
@@ -6,7 +6,7 @@ public class PostTypeText extends Post {
 
     private String text;
 
-    PostTypeText(@NonNull String pid, String uid, String name, int pVersion, String text) {
+    public PostTypeText(@NonNull String pid, String uid, String name, int pVersion, String text) {
         super(pid, uid, name, pVersion);
         this.text = text;
     }

@@ -1,4 +1,6 @@
-package com.example.accordo;
+package com.example.accordo.model;
+
+import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 
@@ -10,20 +12,20 @@ public abstract class Post {
     private String uid;
     private String name;
     private int pVersion;
-    private String userPicture = null;
+    private Bitmap userPicture = null;
 
-    Post(@NonNull String pid, String uid, String name, int pVersion){
+    public Post(@NonNull String pid, String uid, String name, int pVersion){
         this.pid = pid;
         this.uid = uid;
         this.name = name;
         this.pVersion = pVersion;
     }
 
-    public void setUserPicture(String userPicture) {
+    public void setUserPicture(Bitmap userPicture) {
         this.userPicture = userPicture;
     }
 
-    public String getUserPicture() {
+    public Bitmap getUserPicture() {
         return userPicture;
     }
 

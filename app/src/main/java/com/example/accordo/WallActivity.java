@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.accordo.model.Model;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,6 +28,7 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
     private Model model;
     private MyWallAdapter myWallAdapter;
     private NotMyWallAdapter notMyWallAdapter;
+    private SharedPreferences profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,7 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
         networkManager = NetworkManager.getInstance(this);
 
         model = Model.getInstance(getApplication());
-        SharedPreferences profile = getSharedPreferences("profile_data", Context.MODE_PRIVATE);
+        profile = getSharedPreferences("profile_data", Context.MODE_PRIVATE);
 
         RecyclerView myWallRecyclerView = findViewById(R.id.recyclerview_myWall);
         myWallAdapter = new MyWallAdapter(this, model, this);
@@ -47,7 +50,10 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
         notMyWallRecyclerView.setAdapter(notMyWallAdapter);
         notMyWallRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //check Registrazione:
+        checkRegistration();
+    }
+
+    public void checkRegistration(){
         if (profile.getString("sid", null) == null) {
             networkManager.register(
                     result -> {
@@ -55,7 +61,6 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
                         editor.putString("sid", result);
                         editor.apply();
                         Log.d(LOG_TAG, "nuova registrazione completata");
-
                         getWall();
                     },
                     error -> {
@@ -64,7 +69,6 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
         }
         else {
             Log.d(LOG_TAG, "utente gia registrato");
-
             getWall();
         }
     }
