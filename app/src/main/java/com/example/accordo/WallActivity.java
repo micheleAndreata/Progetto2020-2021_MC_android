@@ -1,11 +1,18 @@
 package com.example.accordo;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +26,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 public class WallActivity extends AppCompatActivity implements OnRecyclerViewClickListener{
 
@@ -63,9 +72,7 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
                         Log.d(LOG_TAG, "nuova registrazione completata");
                         getWall();
                     },
-                    error -> {
-                        Log.d(LOG_TAG, "errore chiamata server register");
-                    });
+                    error -> Log.d(LOG_TAG, "errore chiamata server register"));
         }
         else {
             Log.d(LOG_TAG, "utente gia registrato");
@@ -92,9 +99,32 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
                     myWallAdapter.notifyDataSetChanged();
                     model.setNotMyWall(notMine);
                     notMyWallAdapter.notifyDataSetChanged();
-                }, error -> {
-                    Log.d(LOG_TAG, "errore chiamata server getWall");
-                });
+                }, error -> Log.d(LOG_TAG, "errore chiamata server getWall"));
+    }
+
+    public void onNewChannelClick(View v){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Nuovo Canale");
+
+        View viewInflated = LayoutInflater.from(this).inflate(
+                R.layout.text_input_add_channel, findViewById(android.R.id.content),false);
+        final EditText inputText = viewInflated.findViewById(R.id.inputText);
+        builder.setView(viewInflated);
+
+        builder.setPositiveButton("Aggiungi", (dialog, which) -> {
+            Log.d(LOG_TAG, inputText.getText().toString());
+            networkManager.addChannel(
+                    inputText.getText().toString(),
+                    response -> {
+                        if (response)
+                            getWall();
+                    },
+                    error -> Log.d(LOG_TAG, "Errore chiamata addChannel"));
+        });
+        builder.setNegativeButton("Cancella", (dialog, which) -> dialog.cancel());
+
+        builder.show();
     }
 
     @Override
