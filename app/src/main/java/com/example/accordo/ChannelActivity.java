@@ -33,6 +33,8 @@ public class ChannelActivity extends AppCompatActivity {
 
     private Looper secondaryThreadLooper;
 
+    private String cTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +54,22 @@ public class ChannelActivity extends AppCompatActivity {
         channelRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Intent intent = getIntent();
-        String cTitle = intent.getStringExtra("cTitle");
+        cTitle = intent.getStringExtra("cTitle");
+        setTitle(cTitle);
         getChannel(cTitle);
+    }
+
+    public void onSendTextClick(View v){
+        EditText inputTextView = findViewById(R.id.inputText);
+        String text = inputTextView.getText().toString();
+        networkManager.addPost(cTitle, "t", text, null, null,
+                response -> {
+                    if (response) {
+                        getChannel(cTitle);
+                        inputTextView.setText("");
+                    }
+                },
+                error -> Log.d(LOG_TAG, "ERRORE chiamata server addPost"));
     }
 
     public void getChannel(String cTitle){

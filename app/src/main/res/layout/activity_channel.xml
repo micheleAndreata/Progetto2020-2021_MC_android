@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="28dp"
+        android:onClick="onSendTextClick"
         android:text="Invia"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/inputText" />
