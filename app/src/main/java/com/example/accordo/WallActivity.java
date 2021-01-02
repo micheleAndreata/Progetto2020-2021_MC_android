@@ -2,17 +2,13 @@ package com.example.accordo;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,8 +23,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.security.AccessController.getContext;
-
 public class WallActivity extends AppCompatActivity implements OnRecyclerViewClickListener{
 
     private static final String LOG_TAG = "WallActivity";
@@ -42,7 +36,7 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_wall);
 
         networkManager = NetworkManager.getInstance(this);
 
