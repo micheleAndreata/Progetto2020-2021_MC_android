@@ -1,24 +1,27 @@
 package com.example.accordo.model;
 
+import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 
 public class PostTypeImage extends Post {
 
-    private String image;
+    private Bitmap image;
 
-    public PostTypeImage(@NonNull String pid, String uid, String name, int pVersion, String image) {
+    public PostTypeImage(@NonNull String pid, String uid, String name, int pVersion, Bitmap image) {
         super(pid, uid, name, pVersion);
         this.image = image;
     }
 
-    public String getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
+    @NonNull
     public String toString(){
         return getPid() + "\n" + getUid() + "\n" + getName() + "\n" + getUserPicture() + "\n" + getPVersion() + "\n" + getImage();
     }

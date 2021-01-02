@@ -65,9 +65,7 @@ public class ChannelActivity extends AppCompatActivity {
                         updatePostImages(channel);
                     });
                 },
-                error -> {
-                    Log.d(LOG_TAG, "ERRORE chiamata server getChannel");
-                });
+                error -> Log.d(LOG_TAG, "ERRORE chiamata server getChannel"));
     }
 
     public void updateUserPictures(List<Post> postsFromServer){
@@ -92,9 +90,7 @@ public class ChannelActivity extends AppCompatActivity {
                 }
                 else {
                     model.insertUserPicture(dbUser.getUid(), dbUser.getPversion(), dbUser.getPicture());
-                    mainHandler.post(() -> {
-                        channelAdapter.notifyDataSetChanged();
-                    });
+                    mainHandler.post(() -> channelAdapter.notifyDataSetChanged());
                 }
             }
             else {
@@ -111,12 +107,8 @@ public class ChannelActivity extends AppCompatActivity {
                     channelAdapter.notifyDataSetChanged();
                     //Aggiorno dati su DB
                     Handler handler = new Handler(secondaryThreadLooper);
-                    handler.post(() ->{
-                        model.getUserPictureDao().insert(userPicture);
-                    });
-                }, error -> {
-                    Log.d(LOG_TAG, "ERRORE chiamata server getUserPicture");
-                });
+                    handler.post(() -> model.getUserPictureDao().insert(userPicture));
+                }, error -> Log.d(LOG_TAG, "ERRORE chiamata server getUserPicture"));
     }
 
     public void downloadAndUpdateUserPicture(String uid){
@@ -127,12 +119,8 @@ public class ChannelActivity extends AppCompatActivity {
                     channelAdapter.notifyDataSetChanged();
                     //Aggiorno dati su DB
                     Handler handler = new Handler(secondaryThreadLooper);
-                    handler.post(() ->{
-                        model.getUserPictureDao().update(userPicture);
-                    });
-                }, error -> {
-                    Log.d(LOG_TAG, "ERRORE chiamata server getUserPicture");
-                });
+                    handler.post(() -> model.getUserPictureDao().update(userPicture));
+                }, error -> Log.d(LOG_TAG, "ERRORE chiamata server getUserPicture"));
     }
 
     public void updatePostImages(List<Post> postsFromServer){
@@ -141,7 +129,7 @@ public class ChannelActivity extends AppCompatActivity {
         List<PostImage> postImageList = new ArrayList<>();
         for (Post post : postsFromServer){
             if (post instanceof PostTypeImage){
-                postImageList.add(new PostImage(post.getPid(), ((PostTypeImage) post).getImage()));
+                postImageList.add(new PostImage(post.getPid(), ""));
             }
         }
 
@@ -152,9 +140,7 @@ public class ChannelActivity extends AppCompatActivity {
                 PostImage dbPostImage = dbPostImagesList.get(dbPostImagesList.indexOf(postImage));
                 model.insertPostImage(dbPostImage);
                 //notifico adapter
-                mainHandler.post(() -> {
-                    channelAdapter.notifyDataSetChanged();
-                });
+                mainHandler.post(() -> channelAdapter.notifyDataSetChanged());
             }
             else {
                 //scarico immagine da server
@@ -166,12 +152,8 @@ public class ChannelActivity extends AppCompatActivity {
                             channelAdapter.notifyDataSetChanged();
                             //salvo dati su DB
                             Handler handler = new Handler(secondaryThreadLooper);
-                            handler.post(() ->{
-                                model.getPostImageDao().insert(newPostImage);
-                            });
-                        }, error -> {
-                            Log.d(LOG_TAG, "ERRORE chiamata server getPostImage");
-                        });
+                            handler.post(() -> model.getPostImageDao().insert(newPostImage));
+                        }, error -> Log.d(LOG_TAG, "ERRORE chiamata server getPostImage"));
             }
         }
     }

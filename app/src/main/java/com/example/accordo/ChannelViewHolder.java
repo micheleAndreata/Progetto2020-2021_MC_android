@@ -36,9 +36,8 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Post post){
-
+        resetViewHolder();
         usernameView.setText(post.getName());
-
         setUserPicture(post.getUserPicture());
 
         if (post instanceof PostTypeImage) {
@@ -52,45 +51,23 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setUserPicture(String base64Picture){
-        try {
-            if (base64Picture != null){
-                byte[] decodedPicture = Base64.decode(base64Picture, Base64.DEFAULT);
-                Bitmap bitmapPicture = BitmapFactory.decodeByteArray(decodedPicture, 0, decodedPicture.length);
-                if (bitmapPicture != null && bitmapPicture.getWidth() != 0 && bitmapPicture.getHeight() != 0) {
-                    bitmapPicture = Bitmap.createScaledBitmap(bitmapPicture, 150, 150, false);
-                    userPictureView.setImageBitmap(bitmapPicture);
-                }
-                else
-                    Log.d(LOG_TAG, "setUserPicture: bitmapPicture is null or one or more dimensions is 0");
+    public void resetViewHolder(){
+        userPictureView.setImageDrawable(null);
+        imageView.setImageDrawable(null);
+    }
 
-            }
-            else
-                Log.d(LOG_TAG, "setUserPicture: base64Picture is null");
-        }
-        catch (IllegalArgumentException e) {
-            Log.d(LOG_TAG, "setUserPicture: image is not correctly encoded in Base64");
+    public void setUserPicture(Bitmap bitmapPicture){
+        if (bitmapPicture != null && bitmapPicture.getWidth() != 0 && bitmapPicture.getHeight() != 0) {
+            bitmapPicture = Bitmap.createScaledBitmap(bitmapPicture, 150, 150, false);
+            userPictureView.setImageBitmap(bitmapPicture);
         }
     }
 
-    public void setImage(String base64Image){
+    public void setImage(Bitmap bitmapImage){
         imageView.setVisibility(View.VISIBLE);
         contentView.setVisibility(View.GONE);
-        try {
-            if (base64Image != null){
-                byte[] decodedImage = Base64.decode(base64Image, Base64.DEFAULT);
-                Bitmap bitmapImage = BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
-                if (bitmapImage != null && bitmapImage.getWidth() != 0 && bitmapImage.getHeight() != 0)
-                    imageView.setImageBitmap(bitmapImage);
-                else
-                    Log.d(LOG_TAG, "setImage: bitmapImage is null or one or more dimensions is 0");
-            }
-            else
-                Log.d(LOG_TAG, "setImage: base64Image is null");
-        }
-        catch (IllegalArgumentException e) {
-            Log.d(LOG_TAG, "setImage: image is not correctly encoded in Base64");
-        }
+        if (bitmapImage != null && bitmapImage.getWidth() != 0 && bitmapImage.getHeight() != 0)
+            imageView.setImageBitmap(bitmapImage);
     }
 
     public void setPosition(double[] latLon){
