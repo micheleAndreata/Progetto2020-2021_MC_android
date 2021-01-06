@@ -1,17 +1,24 @@
 package com.example.accordo;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -96,6 +103,28 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
                 }, error -> Log.d(LOG_TAG, "errore chiamata server getWall"));
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.profileBtn) {
+            Log.d(LOG_TAG, "mio profilo");
+            toProfileActivity();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void toProfileActivity(){
+        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+        startActivity(intent);
+    }
+
     public void onNewChannelClick(View v){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -111,8 +140,7 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
             networkManager.addChannel(
                     inputText.getText().toString(),
                     response -> {
-                        if (response)
-                            getWall();
+                        getWall();
                     },
                     error -> Log.d(LOG_TAG, "Errore chiamata addChannel"));
         });

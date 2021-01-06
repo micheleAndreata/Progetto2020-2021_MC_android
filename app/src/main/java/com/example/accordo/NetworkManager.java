@@ -30,9 +30,9 @@ public class NetworkManager {
     private static NetworkManager instance = null;
     private static final String baseURL = "https://ewserver.di.unimi.it/mobicomp/accordo/";
 
-    private RequestQueue queue;
-    private SharedPreferences profile;
-    private String alternativeSid = null;
+    private final RequestQueue queue;
+    private final SharedPreferences profile;
+    private final String alternativeSid = null;
 
     private NetworkManager(Context context){
         queue = Volley.newRequestQueue(context.getApplicationContext());
