@@ -173,7 +173,7 @@ public class NetworkManager {
         queue.add(request);
     }
 
-    public void addPost(String ctitle, String type, String content, String lat, String lon, final ResponseListener<Boolean> listener,
+    public void addPost(String ctitle, String type, String content, Double lat, Double lon, final ResponseListener<Boolean> listener,
                         Response.ErrorListener errorListener){
         String addPostURL = baseURL + "addPost.php";
 

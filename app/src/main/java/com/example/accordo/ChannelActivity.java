@@ -1,11 +1,13 @@
 package com.example.accordo;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +22,9 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,20 +33,44 @@ import com.example.accordo.database.UserPicture;
 import com.example.accordo.model.Model;
 import com.example.accordo.model.Post;
 import com.example.accordo.model.PostTypeImage;
+import com.example.accordo.model.PostTypePosition;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.maps.SupportMapFragment;
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class ChannelActivity extends AppCompatActivity {
+public class ChannelActivity extends AppCompatActivity implements OnRecyclerViewClickListener {
 
     private static final String LOG_TAG = "ChannelActivity";
-
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 100;
-
+    private static final int REQUEST_ACCESS_FINE_LOCATION = 101;
     private static final int PICK_IMAGE = 200;
+
+    private LocationCallback locationCallback;
+    private FusedLocationProviderClient fusedLocationClient;
+    private boolean requestingLocationUpdates;
 
     private NetworkManager networkManager;
     private Model model;
@@ -57,16 +85,27 @@ public class ChannelActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel);
 
+        Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
+        requestingLocationUpdates = ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null)
+                    Log.d(LOG_TAG, "error in finding location");
+            }
+        };
+
         HandlerThread handlerThread = new HandlerThread("ChannelHandlerThread");
         handlerThread.start();
         secondaryThreadLooper = handlerThread.getLooper();
 
         networkManager = NetworkManager.getInstance(this);
-
         model = Model.getInstance(getApplication());
 
         RecyclerView channelRecyclerView = findViewById(R.id.recyclerview);
-        channelAdapter = new ChannelAdapter(this, model);
+        channelAdapter = new ChannelAdapter(this, model, this);
         channelRecyclerView.setAdapter(channelAdapter);
         channelRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -75,6 +114,25 @@ public class ChannelActivity extends AppCompatActivity {
         setTitle(cTitle);
         getChannel(cTitle);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (requestingLocationUpdates) {
+            Log.d(LOG_TAG, "starting location updates");
+            startLocationUpdates();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void startLocationUpdates() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,
+                Looper.getMainLooper());
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -94,7 +152,51 @@ public class ChannelActivity extends AppCompatActivity {
                     builder.show();
                 }
                 break;
+            case REQUEST_ACCESS_FINE_LOCATION:
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(LOG_TAG, "Permission granted");
+                    startLocationUpdates();
+                    findAndSendPosition();
+                } else {
+                    Log.d(LOG_TAG, "Permission NOT granted");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Attenzione");
+                    builder.setMessage("Per usufruire di questa caratteristica è necessario il permesso alla posizione del telefono");
+                    builder.setPositiveButton("OK", (dialog, which) -> dialog.cancel());
+                    builder.show();
+                }
+                break;
         }
+    }
+
+    public void onSendPositionClick(View v){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions( new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                    REQUEST_ACCESS_FINE_LOCATION);
+        }
+        else {
+            findAndSendPosition();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    public void findAndSendPosition(){
+        fusedLocationClient.getLastLocation().addOnSuccessListener(
+                this,
+                location -> {
+                    if (location != null) {
+                        Log.d(LOG_TAG, "Last known location: LAT = " + location.getLatitude() + ", LON = " + location.getLongitude());
+                        networkManager.addPost(
+                                cTitle, "l", null, location.getLatitude(), location.getLongitude(),
+                                response -> getChannel(cTitle),
+                                error -> Log.d(LOG_TAG, "ERRORE chiamata server addPost (location)")
+                        );
+                    } else {
+                        Log.d(LOG_TAG, "Last Known location not available");
+                    }
+                });
     }
 
     public void onSendImageClick(View v){
@@ -131,7 +233,7 @@ public class ChannelActivity extends AppCompatActivity {
                     networkManager.addPost(
                             cTitle, "i", base64, null, null,
                             result -> getChannel(cTitle),
-                            error -> Log.d(LOG_TAG, "ERRORE chiamata addPost")
+                            error -> Log.d(LOG_TAG, "ERRORE chiamata server addPost (image)")
                     );
                 }
             })).start();
@@ -148,7 +250,7 @@ public class ChannelActivity extends AppCompatActivity {
                         inputTextView.setText("");
                     }
                 },
-                error -> Log.d(LOG_TAG, "ERRORE chiamata server addPost"));
+                error -> Log.d(LOG_TAG, "ERRORE chiamata server addPost (text)"));
     }
 
     public void getChannel(String cTitle){
@@ -264,7 +366,7 @@ public class ChannelActivity extends AppCompatActivity {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
-    private static Bitmap reduceQuality(Bitmap bm) {
+    public Bitmap reduceQuality(Bitmap bm) {
         int maxWidth = 300;
         int maxHeight = 300;
         int quality = 30;
@@ -276,21 +378,61 @@ public class ChannelActivity extends AppCompatActivity {
         Bitmap compressed = BitmapFactory.decodeStream(new ByteArrayInputStream(outputStream.toByteArray()));
 
         if (width > height) {
-            // landscape
             float ratio = (float) width / maxWidth;
             width = maxWidth;
             height = (int)(height / ratio);
         } else if (height > width) {
-            // portrait
             float ratio = (float) height / maxHeight;
             height = maxHeight;
             width = (int)(width / ratio);
         } else {
-            // square
             height = maxHeight;
             width = maxWidth;
         }
-
         return Bitmap.createScaledBitmap(compressed, width, height, true);
+    }
+
+    @Override
+    public void onRecyclerViewClick(View v, int position) {
+        //codice per visualizzare mappa
+        findViewById(R.id.map_cardview).setVisibility(View.VISIBLE);
+        PostTypePosition post = (PostTypePosition) model.getPost(position);
+        double[] latLon = post.getLatLon();
+
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        MapboxMapOptions options = MapboxMapOptions.createFromAttributes(this, null);
+        options.camera(new CameraPosition.Builder()
+                .target(new LatLng(latLon[0], latLon[1]))
+                .zoom(9)
+                .build());
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance(options);
+        transaction.add(R.id.map_container, mapFragment, "com.mapbox.map");
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(mapboxMap ->
+                    mapboxMap.setStyle(Style.LIGHT, style -> {
+                        MapView mapView = (MapView) mapFragment.getView();
+                        SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, style);
+
+                        symbolManager.setIconAllowOverlap(true);
+                        symbolManager.setIconIgnorePlacement(true);
+
+                        style.addImage("MARKER_ID", ContextCompat.getDrawable(this, R.drawable.mapbox_marker_icon_default));
+
+                        symbolManager.create(new SymbolOptions()
+                                .withLatLng(new LatLng(latLon[0], latLon[1]))
+                                .withIconImage("MARKER_ID")
+                                .withIconSize(2.0f));
+
+                    }));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        findViewById(R.id.map_cardview).setVisibility(View.GONE);
     }
 }

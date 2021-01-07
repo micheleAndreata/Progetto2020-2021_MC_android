@@ -15,17 +15,19 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelViewHolder> {
 
     private LayoutInflater mInflater;
     private Model model;
+    private OnRecyclerViewClickListener onRecyclerViewClickListener;
 
-    public ChannelAdapter(Context context, Model model){
+    public ChannelAdapter(Context context, Model model, OnRecyclerViewClickListener onRecyclerViewClickListener){
         this.mInflater = LayoutInflater.from(context);
         this.model = model;
+        this.onRecyclerViewClickListener = onRecyclerViewClickListener;
     }
 
     @NonNull
     @Override
     public ChannelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recyclerview_channel, parent, false);
-        return new ChannelViewHolder(view);
+        return new ChannelViewHolder(view, onRecyclerViewClickListener);
     }
 
     @Override

@@ -15,13 +15,14 @@
             android:id="@+id/userPictureView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="profile picture"
             android:maxWidth="50dp"
             android:maxHeight="50dp"
             tools:srcCompat="@android:drawable/ic_menu_report_image" />
 
         <TextView
             android:id="@+id/usernameView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="username"
@@ -43,4 +44,14 @@
         android:adjustViewBounds="true"
         android:maxHeight="200dp"
         app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+    <TextView
+        android:id="@+id/positionView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:text="Posizione Condivisa"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:focusable="true" />
 </LinearLayout>
