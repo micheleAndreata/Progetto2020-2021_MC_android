@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".WallActivity">
@@ -11,7 +10,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Channels"
+        android:text="Miei Canali"
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +20,11 @@
         android:id="@+id/recyclerview_myWall"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constrainedHeight="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="250dp"
+        app:layout_constraintHeight_min="30dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
@@ -31,8 +34,8 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:text="Other Channels"
+        android:layout_marginTop="16dp"
+        android:text="Altri Canali"
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/recyclerview_notMyWall"
@@ -42,9 +45,15 @@
         android:id="@+id/recyclerview_notMyWall"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="500dp"
+        app:layout_constraintHeight_min="30dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/newChannelBtn"
@@ -56,6 +65,7 @@
         android:onClick="onNewChannelClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/plus" />
+        app:srcCompat="@drawable/plus"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

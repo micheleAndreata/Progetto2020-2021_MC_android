@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/sendPosBtn"
+        android:id="@+id/sendPositionBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -77,14 +77,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <!--ImageButton
-            android:id="@+id/close_map_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="1dp"
-            android:onClick="onMapCloseClick"
-            app:srcCompat="@android:drawable/ic_delete" /-->
 
         <FrameLayout
             android:id="@+id/map_container"

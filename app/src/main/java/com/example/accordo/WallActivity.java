@@ -3,6 +3,7 @@ package com.example.accordo;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -127,26 +129,31 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
 
     public void onNewChannelClick(View v){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Nuovo Canale");
-
         View viewInflated = LayoutInflater.from(this).inflate(
                 R.layout.text_input_add_channel, findViewById(android.R.id.content),false);
         final EditText inputText = viewInflated.findViewById(R.id.inputText);
-        builder.setView(viewInflated);
 
-        builder.setPositiveButton("Aggiungi", (dialog, which) -> {
-            Log.d(LOG_TAG, inputText.getText().toString());
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Nuovo Canale")
+                .setView(viewInflated)
+                .setPositiveButton("Aggiungi", null)
+                .setNegativeButton("Cancella", null)
+                .show();
+
+        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(view -> {
             networkManager.addChannel(
                     inputText.getText().toString(),
                     response -> {
                         getWall();
+                        dialog.dismiss();
                     },
-                    error -> Log.d(LOG_TAG, "Errore chiamata addChannel"));
+                    error -> {
+                        Log.d(LOG_TAG, "Errore chiamata addChannel");
+                        inputText.setError("Nome canale già presente. Sceglierne un altro.");
+                    });
         });
-        builder.setNegativeButton("Cancella", (dialog, which) -> dialog.cancel());
 
-        builder.show();
     }
 
     @Override

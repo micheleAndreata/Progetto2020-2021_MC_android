@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.BitmapCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -32,7 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String LOG_TAG = "ProfileActivity";
 
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 100;
-    private static final int PICK_IMAGE = 101;
+    private static final int PICK_IMAGE_CODE = 101;
 
     private NetworkManager networkManager;
     private SharedPreferences profile;
@@ -92,13 +91,13 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE && data != null) {
+        if (requestCode == PICK_IMAGE_CODE && data != null) {
             Log.d(LOG_TAG, "image retrieved");
             Uri imageUri = data.getData();
             pictureView.setImageURI(imageUri);
@@ -117,6 +116,9 @@ public class ProfileActivity extends AppCompatActivity {
                             base64,
                             (response) -> {
                                 Log.d(LOG_TAG, "immagine profilo salvata sul server");
+                                SharedPreferences.Editor editor = profile.edit();
+                                editor.putString("picture", base64);
+                                editor.apply();
                             }, error -> {
                                 Log.d(LOG_TAG, "ERRORE chiamata setPicture");
                             }
