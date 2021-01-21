@@ -27,7 +27,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelViewHolder> {
     @Override
     public ChannelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recyclerview_channel, parent, false);
-        return new ChannelViewHolder(view, onRecyclerViewClickListener);
+        return new ChannelViewHolder(view, onRecyclerViewClickListener, parent.getContext());
     }
 
     @Override

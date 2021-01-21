@@ -1,5 +1,6 @@
 package com.example.accordo;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.accordo.model.Post;
@@ -32,10 +34,12 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     private TextView contentView;
     private ImageView imageView;
     private TextView positionView;
+    private Context context;
 
     public ChannelViewHolder(@NonNull View itemView,
-                             OnRecyclerViewClickListener onRecyclerViewClickListener) {
+                             OnRecyclerViewClickListener onRecyclerViewClickListener, Context context) {
         super(itemView);
+        this.context = context;
         this.onRecyclerViewClickListener = onRecyclerViewClickListener;
         userPictureView = itemView.findViewById(R.id.userPictureView);
         usernameView = itemView.findViewById(R.id.usernameView);
@@ -70,6 +74,8 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
             bitmapPicture = Bitmap.createScaledBitmap(bitmapPicture, 150, 150, false);
             userPictureView.setImageBitmap(bitmapPicture);
         }
+        else
+            userPictureView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.userpicture, null));
     }
 
     public void setImage(Bitmap bitmapImage){
@@ -106,4 +112,6 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
                 break;
         }
     }
+
+
 }

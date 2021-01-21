@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1A1B41</color>
+    <color name="colorPrimary">#15737A</color>
     <color name="colorPrimaryDark">#11122C</color>
-    <color name="colorAccent">#86BA90</color>
-    <color name="colorMessage">#457FC3</color>
-    <color name="colorText">#FFF7F8</color>
+    <color name="colorAccent">#03191E</color>
+    <color name="colorFloatingBtn">#B9F3B9</color>
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorMessage">#B2CEDE</color>
+    <color name="colorChannelText">#03191E</color>
     <color name="colorUsername">#03191E</color>
+    <color name="colorChannelName">#03191E</color>
+    <color name="separator_color">#C9C9C9</color>
 </resources>

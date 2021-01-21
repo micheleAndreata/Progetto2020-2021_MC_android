@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -53,8 +54,13 @@ public class ProfileActivity extends AppCompatActivity {
         pictureView = findViewById(R.id.pictureView);
         String stringPicture = profile.getString("picture", null);
         Bitmap bitmapPicture = base64ToBitmap(stringPicture);
-        if (bitmapPicture != null && bitmapPicture.getWidth() != 0 && bitmapPicture.getHeight() != 0)
+        if (bitmapPicture != null && bitmapPicture.getWidth() != 0 && bitmapPicture.getHeight() != 0) {
+            bitmapPicture = Bitmap.createScaledBitmap(bitmapPicture, 200, 200, false);
             pictureView.setImageBitmap(bitmapPicture);
+        }
+        else {
+            pictureView.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.userpicture, null));
+        }
     }
 
     @Override

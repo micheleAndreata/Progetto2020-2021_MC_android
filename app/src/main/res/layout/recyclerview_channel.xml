@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="3dp"
+    android:layout_marginStart="6dp"
     android:layout_marginTop="10dp"
-    android:layout_marginEnd="3dp"
+    android:layout_marginEnd="6dp"
     android:background="@drawable/message_background"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,10 +21,11 @@
             android:id="@+id/userPictureView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             android:contentDescription="profile picture"
             android:foreground="@drawable/round_corners"
-            android:maxWidth="50dp"
-            android:maxHeight="50dp"
+            android:maxWidth="70dp"
+            android:maxHeight="70dp"
             android:padding="6dp"
             tools:srcCompat="@android:drawable/ic_menu_report_image" />
 
@@ -46,7 +47,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="10dp"
         android:text="content"
-        android:textColor="@color/colorText"
+        android:textColor="@color/colorChannelText"
         android:textSize="24sp" />
 
     <ImageView
@@ -66,7 +67,7 @@
         android:focusable="true"
         android:text="Posizione Condivisa"
         android:textAlignment="center"
-        android:textColor="@color/colorText"
+        android:textColor="@color/colorChannelText"
         android:textSize="24sp" />
 
 </LinearLayout>
