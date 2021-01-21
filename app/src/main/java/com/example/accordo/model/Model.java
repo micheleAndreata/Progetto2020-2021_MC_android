@@ -23,25 +23,17 @@ public class Model {
 
     private static Model instance;
 
-    private NetworkManager networkManager;
-
-    private SharedPreferences profile;
-
     private List<Post> channel = new ArrayList<>();
     private List<String> myWall = new ArrayList<>();
     private List<String> notMyWall = new ArrayList<>();
 
-    private UserPictureDao userPictureDao;
-    private PostImageDao postImageDao;
+    private final UserPictureDao userPictureDao;
+    private final PostImageDao postImageDao;
 
     private Model(@NonNull Application application) {
-        this.networkManager = NetworkManager.getInstance(application);
-
         AppDatabase db = AppDatabase.getDatabase(application);
         this.userPictureDao = db.userPictureDao();
         this.postImageDao = db.postImageDao();
-
-        profile = application.getSharedPreferences("profile_data", Context.MODE_PRIVATE);
     }
 
     public static Model getInstance(Application application){

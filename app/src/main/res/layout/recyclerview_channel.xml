@@ -4,19 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_marginStart="3dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="3dp"
+    android:background="@drawable/message_background"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/userPictureView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="profile picture"
+            android:foreground="@drawable/round_corners"
             android:maxWidth="50dp"
             android:maxHeight="50dp"
+            android:padding="6dp"
             tools:srcCompat="@android:drawable/ic_menu_report_image" />
 
         <TextView
@@ -24,7 +33,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingStart="5dp"
             android:text="username"
+            android:textColor="@color/colorUsername"
             android:textSize="30sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -33,13 +44,29 @@
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="10dp"
         android:text="content"
+        android:textColor="@color/colorText"
         android:textSize="24sp" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="150dp"
+        android:adjustViewBounds="true"
+        android:maxHeight="200dp"
         app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+    <Button
+        android:id="@+id/positionView"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Posizione Condivisa"
+        android:textAlignment="center"
+        android:textColor="@color/colorText"
+        android:textSize="24sp" />
+
 </LinearLayout>

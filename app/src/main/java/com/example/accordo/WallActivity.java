@@ -1,14 +1,26 @@
 package com.example.accordo;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,7 +45,7 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_wall);
 
         networkManager = NetworkManager.getInstance(this);
 
@@ -63,9 +75,7 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
                         Log.d(LOG_TAG, "nuova registrazione completata");
                         getWall();
                     },
-                    error -> {
-                        Log.d(LOG_TAG, "errore chiamata server register");
-                    });
+                    error -> Log.d(LOG_TAG, "errore chiamata server register"));
         }
         else {
             Log.d(LOG_TAG, "utente gia registrato");
@@ -92,9 +102,58 @@ public class WallActivity extends AppCompatActivity implements OnRecyclerViewCli
                     myWallAdapter.notifyDataSetChanged();
                     model.setNotMyWall(notMine);
                     notMyWallAdapter.notifyDataSetChanged();
-                }, error -> {
-                    Log.d(LOG_TAG, "errore chiamata server getWall");
-                });
+                }, error -> Log.d(LOG_TAG, "errore chiamata server getWall"));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.profileBtn) {
+            Log.d(LOG_TAG, "mio profilo");
+            toProfileActivity();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void toProfileActivity(){
+        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void onNewChannelClick(View v){
+
+        View viewInflated = LayoutInflater.from(this).inflate(
+                R.layout.text_input_add_channel, findViewById(android.R.id.content),false);
+        final EditText inputText = viewInflated.findViewById(R.id.inputText);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Nuovo Canale")
+                .setView(viewInflated)
+                .setPositiveButton("Aggiungi", null)
+                .setNegativeButton("Cancella", null)
+                .show();
+
+        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(view -> {
+            networkManager.addChannel(
+                    inputText.getText().toString(),
+                    response -> {
+                        getWall();
+                        dialog.dismiss();
+                    },
+                    error -> {
+                        Log.d(LOG_TAG, "Errore chiamata addChannel");
+                        inputText.setError("Nome canale già presente. Sceglierne un altro.");
+                    });
+        });
+
     }
 
     @Override
