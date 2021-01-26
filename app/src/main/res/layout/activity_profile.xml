@@ -4,63 +4,77 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorMessage"
     tools:context=".ProfileActivity">
 
     <ImageView
         android:id="@+id/pictureView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginTop="36dp"
         android:adjustViewBounds="true"
+        android:foreground="@drawable/round_corners"
         android:maxWidth="300px"
         android:maxHeight="300px"
+        android:padding="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <ImageView
+        android:id="@+id/changeNameBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/round_corners_inputs"
+        android:onClick="onNameChangeClick"
+        android:padding="10dp"
+        app:layout_constraintStart_toEndOf="@+id/nomeView"
+        app:layout_constraintTop_toBottomOf="@+id/modificaImmagine"
+        app:srcCompat="@drawable/edit" />
+
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="344dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="64dp"
         android:text="Nome:"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/changeNameBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:onClick="onNameChangeClick"
-        android:text="cambia"
-        app:layout_constraintBaseline_toBaselineOf="@+id/nomeView"
-        app:layout_constraintStart_toEndOf="@+id/nomeView" />
+        app:layout_constraintEnd_toStartOf="@+id/nomeView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/modificaImmagine" />
 
     <EditText
         android:id="@+id/nomeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:hint="Aggiungi nome"
         android:lineSpacingExtra="14sp"
         android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
+        app:layout_constraintEnd_toStartOf="@+id/changeNameBtn"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView5" />
 
     <Button
-        android:id="@+id/debug"
+        android:id="@+id/modificaImmagine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_corners_inputs"
         android:onClick="onPictureChangeClick"
-        android:text="Button"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:text="Modifica immagine"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pictureView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

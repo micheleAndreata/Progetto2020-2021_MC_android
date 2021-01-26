@@ -79,24 +79,7 @@ public class Model {
         this.channel = channel;
     }
 
-    public synchronized void setPost(int index, Post post){
-        channel.set(index, post);
-    }
-
-    public synchronized void insertUserPicture(String uid, int pVersion, String base64Picture) {
-        Bitmap bitmapPicture;
-        try {
-            if (base64Picture != null){
-                byte[] decodedPicture = Base64.decode(base64Picture, Base64.DEFAULT);
-                bitmapPicture = BitmapFactory.decodeByteArray(decodedPicture, 0, decodedPicture.length);
-            }
-            else
-                bitmapPicture = null;
-        }
-        catch (IllegalArgumentException e) {
-            bitmapPicture = null;
-        }
-
+    public synchronized void insertUserPicture(String uid, int pVersion, Bitmap bitmapPicture) {
         for (int i=0; i < channel.size(); i++){
             Post post = channel.get(i);
             if (post.getUid().equals(uid)){
@@ -107,19 +90,10 @@ public class Model {
         }
     }
 
-    public synchronized void insertPostImage(PostImage postImage){
-        Bitmap bitmapImage;
-        try {
-            byte[] decodedImage = Base64.decode(postImage.getImage(), Base64.DEFAULT);
-            bitmapImage = BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
-        }
-        catch (IllegalArgumentException e) {
-            bitmapImage = null;
-        }
-
+    public synchronized void insertPostImage(String pid, Bitmap bitmapImage){
         for (int i=0; i < channel.size(); i++){
             Post post = channel.get(i);
-            if (post.getPid().equals(postImage.getPid())){
+            if (post.getPid().equals(pid)){
                 ((PostTypeImage) post).setImage(bitmapImage);
                 channel.set(i, post);
             }
