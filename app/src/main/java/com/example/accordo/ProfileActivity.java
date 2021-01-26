@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -53,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         pictureView = findViewById(R.id.pictureView);
         String stringPicture = profile.getString("picture", null);
-        Bitmap bitmapPicture = base64ToBitmap(stringPicture);
+        Bitmap bitmapPicture = ImageUtils.base64ToBitmap(stringPicture);
         if (bitmapPicture != null && bitmapPicture.getWidth() != 0 && bitmapPicture.getHeight() != 0) {
             bitmapPicture = Bitmap.createScaledBitmap(bitmapPicture, 200, 200, false);
             pictureView.setImageBitmap(bitmapPicture);
@@ -115,8 +116,8 @@ public class ProfileActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 if (bitmap != null){
-                    Bitmap lowQuality = reduceQuality(bitmap);
-                    String base64 = bitmapToBase64(lowQuality);
+                    Bitmap lowQuality = ImageUtils.reduceImageQuality(bitmap);
+                    String base64 = ImageUtils.bitmapToBase64(lowQuality);
                     networkManager.setProfile(
                             null,
                             base64,
@@ -167,58 +168,5 @@ public class ProfileActivity extends AppCompatActivity {
         builder.setMessage("Il nome inserito è già stato preso. Sceglierne un altro.");
         builder.setPositiveButton("OK", (dialog, which) -> dialog.cancel());
         builder.show();
-    }
-
-    public Bitmap base64ToBitmap(String base64){
-        Bitmap bitmap;
-        try {
-            if (base64 != null){
-                byte[] decodedPicture = Base64.decode(base64, Base64.DEFAULT);
-                bitmap = BitmapFactory.decodeByteArray(decodedPicture, 0, decodedPicture.length);
-            }
-            else
-                bitmap = null;
-        }
-        catch (IllegalArgumentException e) {
-            bitmap = null;
-        }
-        return bitmap;
-    }
-
-    public String bitmapToBase64(Bitmap bitmap){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] byteArray = baos.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
-    }
-
-    private static Bitmap reduceQuality(Bitmap bm) {
-        int maxWidth = 300;
-        int maxHeight = 300;
-        int quality = 30;
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-        Bitmap compressed = BitmapFactory.decodeStream(new ByteArrayInputStream(outputStream.toByteArray()));
-
-        if (width > height) {
-            // landscape
-            float ratio = (float) width / maxWidth;
-            width = maxWidth;
-            height = (int)(height / ratio);
-        } else if (height > width) {
-            // portrait
-            float ratio = (float) height / maxHeight;
-            height = maxHeight;
-            width = (int)(width / ratio);
-        } else {
-            // square
-            height = maxHeight;
-            width = maxWidth;
-        }
-
-        return Bitmap.createScaledBitmap(compressed, width, height, true);
     }
 }

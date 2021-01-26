@@ -10,5 +10,4 @@
     <style name="alertDialogCustom" parent="@android:style/Theme.Dialog">
         <item name="android:textColor">#15737A</item>
     </style>
-
 </resources>

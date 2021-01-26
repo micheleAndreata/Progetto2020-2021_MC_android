@@ -80,8 +80,12 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
 
     public void setImage(Bitmap bitmapImage){
         show(IMAGE);
-        if (bitmapImage != null && bitmapImage.getWidth() != 0 && bitmapImage.getHeight() != 0)
+        if (bitmapImage != null && bitmapImage.getWidth() != 0 && bitmapImage.getHeight() != 0) {
             imageView.setImageBitmap(bitmapImage);
+            imageView.setOnClickListener(view -> {
+                onRecyclerViewClickListener.onRecyclerViewClick(view, getAdapterPosition());
+            });
+        }
     }
 
     public void setPosition(double[] latLon){
