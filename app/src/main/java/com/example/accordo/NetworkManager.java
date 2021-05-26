@@ -145,6 +145,14 @@ public class NetworkManager {
         queue.add(request);
     }
 
+
+    /**
+     *
+     * @param listener
+     * @param errorListener
+     *
+     * callback ritorna List<JSONObject> wall
+     */
     public void getWall(final ResponseListener<List<JSONObject>> listener, Response.ErrorListener errorListener){
         String getWallURL = baseURL + "getWall.php";
         JSONObject jsonContent = new JSONObject();
@@ -331,5 +339,33 @@ public class NetworkManager {
             } catch (JSONException e) {e.printStackTrace();}
         }
         return postList;
+    }
+
+    public void getSponsor(final ResponseListener<List<JSONObject>> listener, Response.ErrorListener errorListener){
+        String registerURL = baseURL + "sponsors.php";
+        JSONObject jsonContent = new JSONObject();
+        try {
+            jsonContent.put("sid", profile.getString("sid", alternativeSid));
+        } catch (JSONException e) { e.printStackTrace(); }
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                registerURL,
+                jsonContent,
+                response -> {
+                    Log.d(LOG_TAG, "getSponsor response OK");
+
+                    try {
+                        JSONArray jsonSponsors = response.getJSONArray("sponsors");
+//                        String out = "sponsors number: " + jsonWall.length();
+                        List<JSONObject> sponsor = new ArrayList<>();
+                        for (int i=0; i < jsonSponsors.length(); i++){
+                            sponsor.add(jsonSponsors.getJSONObject(i));
+                        }
+                        listener.getResult(sponsor);
+                    } catch (JSONException e) { e.printStackTrace(); }
+                },
+                errorListener
+        );
+        queue.add(request);
     }
 }

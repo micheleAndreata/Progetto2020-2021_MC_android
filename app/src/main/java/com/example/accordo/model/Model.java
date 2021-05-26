@@ -16,6 +16,8 @@ import com.example.accordo.database.PostImage;
 import com.example.accordo.database.PostImageDao;
 import com.example.accordo.database.UserPictureDao;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class Model {
     private List<Post> channel = new ArrayList<>();
     private List<String> myWall = new ArrayList<>();
     private List<String> notMyWall = new ArrayList<>();
+    private List<JSONObject> sponsor = new ArrayList<>();
 
     private final UserPictureDao userPictureDao;
     private final PostImageDao postImageDao;
@@ -51,21 +54,29 @@ public class Model {
         return userPictureDao;
     }
 
+
+    // MY WALL
     public List<String> getMyWall() {
         return myWall;
     }
 
+    public void setMyWall(List<String> myWall) { this.myWall = myWall; }
+
+    // NOT MY WALL
     public List<String> getNotMyWall() {
         return notMyWall;
-    }
-
-    public void setMyWall(List<String> myWall) {
-        this.myWall = myWall;
     }
 
     public void setNotMyWall(List<String> notMyWall) {
         this.notMyWall = notMyWall;
     }
+
+    // SPONSOR
+    public List<JSONObject> getSponsor() { return sponsor; }
+
+    public void setSponsor(List<JSONObject> sponsor) { this.sponsor = sponsor; }
+
+
 
     public synchronized int getChannelSize(){
         return channel.size();

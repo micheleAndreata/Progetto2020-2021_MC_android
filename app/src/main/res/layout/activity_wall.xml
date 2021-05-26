@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_myWall"
+        android:id="@+id/recyclerview_sponsor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constrainedHeight="true"
@@ -44,7 +44,7 @@
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/recyclerview_notMyWall"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerview_myWall" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview_sponsor" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_notMyWall"
@@ -73,5 +73,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/plus" />
+
+    <Button
+        android:id="@+id/sponsor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="24dp"
+        android:onClick="goToSponsor"
+        android:text="Sponsor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/newChannelBtn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

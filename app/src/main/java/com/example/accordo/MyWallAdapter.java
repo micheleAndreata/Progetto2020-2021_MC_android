@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.accordo.model.Model;
 
-public class MyWallAdapter extends RecyclerView.Adapter<WallViewHolder> {
+public class MyWallAdapter extends RecyclerView.Adapter<WallViewHolder> { //serve per gestire i viewHolder e li ricicla perchè estende RecyclerView
 
     private LayoutInflater mInflater;
     private Model model;
@@ -22,21 +22,23 @@ public class MyWallAdapter extends RecyclerView.Adapter<WallViewHolder> {
         this.onRecyclerViewClickListener = onRecyclerViewClickListener;
     }
 
+    // gestisce la creazione del viewHolder (l'elemento della lista)
     @NonNull
     @Override
     public WallViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // definiamo una view
         View view = mInflater.inflate(R.layout.recyclerview_wall, parent, false);
-        return new WallViewHolder(view, onRecyclerViewClickListener);
+        return new WallViewHolder(view, onRecyclerViewClickListener); 
     }
 
-    @Override
+    @Override // gestisce l'inserimento dei dati nel viewHolder
     public void onBindViewHolder(@NonNull WallViewHolder holder, int position) {
         String cTitle = model.getMyWall().get(position);
         holder.bind(cTitle);
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount() { //ritorna la dimensione della lista, è una funzione che SERVE ALL'ADAPTER
         return model.getMyWall().size();
     }
 }
